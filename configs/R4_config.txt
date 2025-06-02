@@ -1,0 +1,20 @@
+enable
+configure terminal
+hostname R4
+interface FastEthernet0/0
+ip address 200.0.40.1 255.255.255.0
+no shutdown
+exit
+interface FastEthernet0/1
+ip address 200.0.3.2 255.255.255.252
+no shutdown
+exit
+interface Serial2/0
+ip address 200.0.4.1 255.255.255.252
+no shutdown
+exit
+ip route 200.0.10.0 255.255.255.0 200.0.3.1
+ip route 200.0.20.0 255.255.255.0 200.0.3.1
+ip route 200.0.30.0 255.255.255.0 200.0.3.1
+ip route 200.0.50.0 255.255.255.0 200.0.4.2
+write 

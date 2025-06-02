@@ -1,0 +1,40 @@
+| Dispositivo | Interface         | Endereço IP        | Máscara           | Observação                |
+|-------------|-------------------|--------------------|-------------------|---------------------------|
+| R1          | FastEthernet0/0   | 200.0.10.1         | 255.255.255.0     | Subrede local             |
+| R1          | FastEthernet0/1   | 200.0.1.1          | 255.255.255.252   | Backbone p/ R2            |
+| Switch1     | Fa0/1             | -                  | -                 | Para R1 Fa0/0             |
+| Switch1     | Fa0/2             | -                  | -                 | Para PC1                  |
+| Switch1     | Fa0/3             | -                  | -                 | Para PC2                  |
+| R2          | FastEthernet0/0   | 200.0.20.1         | 255.255.255.0     | Subrede local             |
+| R2          | FastEthernet0/1   | 200.0.1.2          | 255.255.255.252   | Backbone p/ R1            |
+| R2          | Serial2/0         | 200.0.2.1          | 255.255.255.252   | Backbone p/ R3            |
+| Switch2     | Fa0/1             | -                  | -                 | Para R2 Fa0/0             |
+| Switch2     | Fa0/2             | -                  | -                 | Para PC3                  |
+| Switch2     | Fa0/3             | -                  | -                 | Para PC4                  |
+| R3          | FastEthernet0/0   | 200.0.30.1         | 255.255.255.0     | Subrede local             |
+| R3          | FastEthernet0/1   | 200.0.2.2          | 255.255.255.252   | Backbone p/ R2            |
+| R3          | Serial2/0         | 200.0.3.1          | 255.255.255.252   | Backbone p/ R4            |
+| Switch3     | Fa0/1             | -                  | -                 | Para R3 Fa0/0             |
+| Switch3     | Fa0/2             | -                  | -                 | Para PC5                  |
+| Switch3     | Fa0/3             | -                  | -                 | Para PC6                  |
+| R4          | FastEthernet0/0   | 200.0.40.1         | 255.255.255.0     | Subrede local             |
+| R4          | FastEthernet0/1   | 200.0.3.2          | 255.255.255.252   | Backbone p/ R3            |
+| R4          | Serial2/0         | 200.0.4.1          | 255.255.255.252   | Backbone p/ R5            |
+| Switch4     | Fa0/1             | -                  | -                 | Para R4 Fa0/0             |
+| Switch4     | Fa0/2             | -                  | -                 | Para PC7                  |
+| Switch4     | Fa0/3             | -                  | -                 | Para PC8                  |
+| R5          | FastEthernet0/0   | 200.0.50.1         | 255.255.255.0     | Subrede local             |
+| R5          | FastEthernet0/1   | 200.0.4.2          | 255.255.255.252   | Backbone p/ R4            |
+| Switch5     | Fa0/1             | -                  | -                 | Para R5 Fa0/0             |
+| Switch5     | Fa0/2             | -                  | -                 | Para PC9                  |
+| Switch5     | Fa0/3             | -                  | -                 | Para PC10                 |
+| PC1         | -                 | 200.0.10.2         | 255.255.255.0     | Host subrede R1           |
+| PC2         | -                 | 200.0.10.3         | 255.255.255.0     | Host subrede R1           |
+| PC3         | -                 | 200.0.20.2         | 255.255.255.0     | Host subrede R2           |
+| PC4         | -                 | 200.0.20.3         | 255.255.255.0     | Host subrede R2           |
+| PC5         | -                 | 200.0.30.2         | 255.255.255.0     | Host subrede R3           |
+| PC6         | -                 | 200.0.30.3         | 255.255.255.0     | Host subrede R3           |
+| PC7         | -                 | 200.0.40.2         | 255.255.255.0     | Host subrede R4           |
+| PC8         | -                 | 200.0.40.3         | 255.255.255.0     | Host subrede R4           |
+| PC9         | -                 | 200.0.50.2         | 255.255.255.0     | Host subrede R5           |
+| PC10        | -                 | 200.0.50.3         | 255.255.255.0     | Host subrede R5           | 
