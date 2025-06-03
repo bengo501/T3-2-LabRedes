@@ -1,0 +1,121 @@
+Relatório do Projeto de Topologia no GNS3
+
+1. Descrição da Topologia
+A topologia criada no GNS3 é composta por:
+- 10 PCs (VPCS): PC1 a PC10, representando hosts finais.
+- 5 Switches: Switch1 a Switch5, conectando os PCs aos roteadores.
+- 5 Roteadores Cisco 3745: R1 a R5, formando o backbone da rede e interligando os switches.
+
+Conexões:
+Cada switch conecta dois PCs a um roteador, e os roteadores estão conectados em série, formando uma linha.
+Visualmente, cada par de PCs está ligado a um switch, que por sua vez está ligado a um roteador. Os roteadores estão interligados entre si, formando uma rede linear.
+
+2. Configurações dos Dispositivos
+2.1 VPCS (PCs)
+Função: Simulam computadores finais para testes de conectividade.
+Configuração típica:
+- IP estático atribuído manualmente (exemplo: 192.168.X.Y/24).
+- Gateway apontando para o IP da interface do roteador correspondente.
+
+2.2 Switches
+Função: Fazem a interligação entre os PCs e os roteadores.
+Configuração:
+- Switches do GNS3 são dispositivos simples, sem configuração avançada (Layer 2).
+- Apenas repassam os quadros Ethernet entre PCs e roteadores.
+
+2.3 Roteadores (Cisco 3745)
+Função: Interligam os switches e formam o backbone da rede.
+Configuração esperada:
+- Interfaces FastEthernet conectadas aos switches.
+- Interfaces Serial ou FastEthernet conectando os roteadores entre si.
+- Endereçamento IP nas interfaces.
+- Rotas estáticas ou dinâmicas para garantir a comunicação entre todos os PCs.
+
+3. Configurações dos Roteadores
+Na topologia desenvolvida, foram utilizados roteadores do modelo Cisco 3745. Cada roteador desempenha um papel fundamental na interligação dos segmentos de rede, conectando switches e PCs, além de realizar o roteamento entre as diferentes sub-redes.
+
+Configurações Básicas Realizadas
+- Atribuição de Endereços IP:
+  Cada interface dos roteadores foi configurada com um endereço IP pertencente à sub-rede correspondente. Isso garante que cada segmento de rede possa ser identificado e roteado corretamente.
+- Configuração das Interfaces:
+  As interfaces FastEthernet dos roteadores foram conectadas aos switches, enquanto as interfaces Serial ou FastEthernet adicionais foram utilizadas para interligar os roteadores entre si, formando o backbone da rede.
+- Definição de Gateway:
+  Para cada sub-rede, o roteador atua como gateway padrão para os PCs conectados ao respectivo switch.
+- Roteamento:
+  Dependendo do cenário, pode ser utilizado roteamento estático (com rotas adicionadas manualmente) ou dinâmico (protocolo como RIP, OSPF ou EIGRP) para garantir a comunicação entre todas as sub-redes.
+- Idle-PC:
+  O parâmetro Idle-PC foi configurado (ou deveria ser configurado) para otimizar o uso de CPU do Dynamips, evitando que o emulador consuma recursos excessivos do sistema.
+- Ajuste de Memória RAM:
+  A quantidade de memória RAM atribuída a cada roteador foi ajustada conforme o recomendado para o modelo Cisco 3745, normalmente entre 128MB e 256MB, para garantir o funcionamento adequado da imagem IOS.
+- Permissões e Caminho da Imagem IOS:
+  A imagem IOS utilizada foi verificada quanto à compatibilidade e permissões de leitura, garantindo que o Dynamips pudesse inicializar corretamente cada roteador.
+
+Exemplo de Configuração de Interface em um Roteador:
+interface FastEthernet0/0
+ ip address 192.168.1.1 255.255.255.0
+ no shutdown
+
+interface FastEthernet0/1
+ ip address 10.0.0.1 255.255.255.252
+ no shutdown
+
+Observações:
+Todos os roteadores foram configurados de forma semelhante, adaptando os endereços IP e interfaces conforme a posição de cada um na topologia.
+A correta configuração das interfaces e do roteamento é essencial para garantir a comunicação entre todos os PCs da rede.
+
+4. Tentativa de Execução do GNS3 no Linux e Problemas com Portas
+Durante a realização do trabalho, tentei rodar o GNS3 no sistema operacional Linux. No entanto, enfrentei dificuldades relacionadas à comunicação do GNS3 com o servidor local, especificamente com o uso das portas de conexão.
+
+Ao iniciar o GNS3, o software tentava se conectar à porta padrão 3080 (usada pelo GNS3 Server). O sistema informava que já havia uma conexão ativa nessa porta, sugerindo que outro processo do GNS3 já estava em execução ou que a porta não havia sido liberada corretamente após uma execução anterior. Isso impedia o funcionamento normal da interface gráfica e a inicialização dos projetos.
+
+Quando tentei configurar o GNS3 para utilizar outras portas, o software não conseguia estabelecer a comunicação com o servidor, resultando em mensagens de timeout. Ou seja, o GNS3 não conseguia se conectar ao servidor local em nenhuma das portas alternativas testadas, o que impossibilitou o uso pleno da ferramenta.
+
+Esses problemas de conexão com as portas impediram a inicialização adequada dos roteadores e a configuração do ambiente de simulação, impactando diretamente o andamento do trabalho.
+
+5. Principais Erros Encontrados
+Durante a execução do projeto, diversos erros críticos foram observados, principalmente relacionados ao Dynamips (emulador de roteadores Cisco):
+
+5.1 Dynamips "Broken Pipe"
+Mensagem:
+Could not send Dynamips command 'vm set_ghost_status "R5" 2' to 0.0.0.0:49861: [Errno 32] Broken pipe, process running: False
+Causa provável:
+- Dynamips encerrou inesperadamente, geralmente por:
+  - Imagem IOS corrompida ou incompatível.
+  - RAM configurada acima do recomendado.
+  - Idle-PC não configurado.
+  - Permissões insuficientes na imagem IOS.
+Consequência:
+- Os roteadores (R1 a R5) não iniciam corretamente (ícone vermelho).
+- Não é possível setar Idle-PC, pois o processo do roteador já caiu.
+
+5.2 Outros Erros
+- Outro GNS3 GUI já rodando:
+  - Pode causar conflitos de gerenciamento dos dispositivos.
+- Links não criados ou removidos corretamente:
+  - Devido à queda dos roteadores, links entre dispositivos podem não ser estabelecidos.
+
+6. Diagnóstico e Recomendações
+6.1 Diagnóstico
+- VPCS e Switches:
+  - Funcionam normalmente, pois não dependem do Dynamips.
+- Roteadores:
+  - Todos os roteadores Cisco 3745 estão com falha de inicialização devido a problemas com Dynamips/IOS.
+
+6.2 Recomendações para Solução
+1. Verificar a imagem IOS:
+   - Certifique-se de que a imagem usada é compatível com o modelo 3745 e não está corrompida.
+2. Ajustar a RAM:
+   - Use o valor padrão sugerido pelo GNS3 (ex: 128MB ou 256MB).
+3. Configurar Idle-PC:
+   - Após garantir que o roteador inicia, configure o Idle-PC para reduzir o uso de CPU e evitar quedas.
+4. Permissões:
+   - Garanta que a imagem IOS tem permissão de leitura para o usuário do GNS3.
+5. Atualizar Dynamips e GNS3:
+   - Use as versões mais recentes para evitar bugs conhecidos.
+6. Evitar múltiplas GUIs:
+   - Sempre use apenas uma instância do GNS3 GUI por vez.
+
+7. Conclusão
+A topologia proposta é adequada para simular uma rede de médio porte, com múltiplos segmentos e roteamento entre eles.
+Os principais problemas encontrados estão relacionados à configuração e compatibilidade do Dynamips e da imagem IOS dos roteadores.
+Com a correção desses pontos, a topologia deve funcionar normalmente, permitindo testes de conectividade, roteamento e simulação de cenários de rede. 
